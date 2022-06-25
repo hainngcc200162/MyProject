@@ -3,7 +3,7 @@ var validator = require("email-validator");
 
 var employeeSchema = new mongoose.Schema({
     fullName: {
-        type: String,
+        type: String, unique: true,
         required: 'This field is required'
     },
     email: {
