@@ -1,11 +1,11 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const Employee = mongoose.model('Employee');
+const Customer = mongoose.model('Customer');
 const router = express.Router();
 
 router.get("/", (req, res) => {
-    res.render("employee/addOrEdit", {
-        viewTitle: "Insert Employee"
+    res.render("Customer/addOrEdit", {
+        viewTitle: "Insert Customer"
     })
 })
 
@@ -19,22 +19,22 @@ router.post("/", (req, res) => {
 })
 
 function insertRecord(req, res) {
-    var employee = new Employee();
-    employee.fullName = req.body.fullName;
-    employee.email = req.body.email;
-    employee.city = req.body.city;
-    employee.mobile = req.body.mobile;
+    var Customer = new Customer();
+    Customer.fullName = req.body.fullName;
+    Customer.email = req.body.email;
+    Customer.city = req.body.city;
+    Customer.mobile = req.body.mobile;
 
-    employee.save((err, doc) => {
+    Customer.save((err, doc) => {
         if (!err) {
-            res.redirect('employee/list');
+            res.redirect('Customer/list');
         }
         else {
             if (err.name == "ValidationError") {
                 handleValidationError(err, req.body);
-                res.render("employee/addOrEdit", {
-                    viewTitle: "Insert Employee",
-                    employee: req.body
+                res.render("Customer/addOrEdit", {
+                    viewTitle: "Insert Customer",
+                    Customer: req.body
                 })
             }
             console.log("Error occured during record insertion" + err);
@@ -43,16 +43,16 @@ function insertRecord(req, res) {
 }
 
 function updateRecord(req, res) {
-    Employee.findOneAndUpdate({ _id: req.body._id, }, req.body, { new: true }, (err, doc) => {
+    Customer.findOneAndUpdate({ _id: req.body._id, }, req.body, { new: true }, (err, doc) => {
         if (!err) {
-            res.redirect('employee/list');
+            res.redirect('Customer/list');
         }
         else {
             if (err.name == "ValidationError") {
                 handleValidationError(err, req.body);
-                res.render("employee/addOrEdit", {
-                    viewTitle: 'Update Employee',
-                    employee: req.body
+                res.render("Customer/addOrEdit", {
+                    viewTitle: 'Update Customer',
+                    Customer: req.body
                 });
             }
             else {
@@ -63,9 +63,9 @@ function updateRecord(req, res) {
 }
 
 router.get('/list', (req, res) => {
-    Employee.find((err, docs) => {
+    Customer.find((err, docs) => {
         if (!err) {
-            res.render("employee/list", {
+            res.render("Customer/list", {
                 list: docs
             })
         }
@@ -73,11 +73,11 @@ router.get('/list', (req, res) => {
 })
 
 router.get('/:id', (req, res) => {
-    Employee.findById(req.params.id, (err, doc) => {
+    Customer.findById(req.params.id, (err, doc) => {
         if (!err) {
-            res.render("employee/addOrEdit", {
-                viewTitle: "Update Employee",
-                employee: doc
+            res.render("Customer/addOrEdit", {
+                viewTitle: "Update Customer",
+                Customer: doc
             })
         }
     })
@@ -86,7 +86,7 @@ router.get('/:id', (req, res) => {
 router.get('/delete/:id', (req, res) => {
     Employee.findByIdAndRemove(req.params.id, (err, doc) => {
         if (!err) {
-            res.redirect('/employee/list');
+            res.redirect('/Customer/list');
         }
         else {
             console.log("An error occured during the Delete Process" + err);
